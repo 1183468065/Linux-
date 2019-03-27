@@ -1,0 +1,89 @@
+1、MongoDB后台启动：mongod --fork --logpath /data/mopngodb/log/mongodb.log logpath日志路径；
+   安装：https://blog.csdn.net/wangzuokun/article/details/70799976
+   开机启动脚本：https://blog.csdn.net/i_vic/article/details/53466348
+
+2、nohup java -jar XXX.jar &；nohup 不挂断运行的命令，当终端或者账户关闭的时候，程序依旧运行。
+
+3、ip addr;查看IP地址
+
+4、rpm -ivh mysql-community-server-8.0.11-1.el7.x86_64.rpm --nodeps；安装mysql
+
+5、yum -y install make gcc gcc-c++ ncurses-devel；redis编译工具；make MALLOC=libc；
+
+6、安装redis：https://www.cnblogs.com/chenhongl/p/8955543.html（redis默认只能本机客户端链接，如配置远程可连接需要修改配置）
+
+7、tar -zxvf jre-8u161-linux-x64.tar.gz；解压j1.8安装包；
+
+8、自Linux中中配置完JDK后，用java -version查看，
+发现出现bash: /usr/bin/java: /lib/ld-linux.so.2: bad ELF interpreter: 没有那个文件或目录，
+经上网查找发现缺少东西，输入sudo yum install glibc.i686 这个命令即可解决此问题。
+
+9、yum -y install net-tools
+
+10、nginx安装https://www.cnblogs.com/jimisun/p/8057156.html
+
+11、固定ip，要先查看当前网卡名称，再修改网卡文件https://blog.csdn.net/jcxch/article/details/48632761
+
+12、是因为mysql8使用的是caching_sha2_password加密规则，最简单的方法是修改远程连接用户的加密规则：
+
+mysql>ALTER USER 'chenadmin'@'%' IDENTIFIED WITH mysql_native_password BY 'Chenadmin0.';
+
+mysql 8 加密规则改变了，所以远程连接有问题；
+
+13、安装zoo：https://www.linuxidc.com/Linux/2016-09/135052.htm
+
+14、zoo 集群 https://www.linuxidc.com/Linux/2017-01/139733.htm
+	开机启动：http://www.bubuko.com/infodetail-2047052.html
+
+15、关闭防火墙https://www.cnblogs.com/moxiaoan/p/5683743.html   systemctl stop firewalld
+
+16、nginx：https://www.cnblogs.com/hafiz/p/6891458.html?utm_source=itdadao&utm_medium=referral、	https://www.cnblogs.com/ansibee/p/8087476.html
+	开机启动：https://blog.csdn.net/asnn0208/article/details/78909409
+
+17、安装rabbitmq：https://blog.csdn.net/super_rd/article/details/70241007?utm_source=itdadao&utm_medium=referral
+    rabbitmq-server -detached //启动rabbitmq，-detached代表后台守护进程方式启动。
+
+18、CentOS7使用firewalld打开关闭防火墙与端口
+1、firewalld的基本使用
+启动： systemctl start firewalld
+关闭： systemctl stop firewalld
+查看状态： systemctl status firewalld 
+开机禁用  ： systemctl disable firewalld
+开机启用  ： systemctl enable firewalld
+ 
+ 
+2.systemctl是CentOS7的服务管理工具中主要的工具，它融合之前service和chkconfig的功能于一体。
+启动一个服务：systemctl start firewalld.service
+关闭一个服务：systemctl stop firewalld.service
+重启一个服务：systemctl restart firewalld.service
+显示一个服务的状态：systemctl status firewalld.service
+在开机时启用一个服务：systemctl enable firewalld.service
+在开机时禁用一个服务：systemctl disable firewalld.service
+查看服务是否开机启动：systemctl is-enabled firewalld.service
+查看已启动的服务列表：systemctl list-unit-files|grep enabled
+查看启动失败的服务列表：systemctl --failed
+
+3.配置firewalld-cmd
+
+查看版本： firewall-cmd --version
+查看帮助： firewall-cmd --help
+显示状态： firewall-cmd --state
+查看所有打开的端口： firewall-cmd --zone=public --list-ports
+更新防火墙规则： firewall-cmd --reload
+查看区域信息:  firewall-cmd --get-active-zones
+查看指定接口所属区域： firewall-cmd --get-zone-of-interface=eth0
+拒绝所有包：firewall-cmd --panic-on
+取消拒绝状态： firewall-cmd --panic-off
+查看是否拒绝： firewall-cmd --query-panic
+ 
+那怎么开启一个端口呢
+添加
+firewall-cmd --zone=public --add-port=80/tcp --permanent    （--permanent永久生效，没有此参数重启后失效）
+重新载入
+firewall-cmd --reload
+查看
+firewall-cmd --zone= public --query-port=80/tcp
+删除
+firewall-cmd --zone= public --remove-port=80/tcp --permanent
+
+19、配置authorized_keys这个文件的权限只能是600,777权限会导致ssh错误；
